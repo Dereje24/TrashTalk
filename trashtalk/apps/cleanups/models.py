@@ -114,3 +114,19 @@ class Location(models.Model):
 
     def is_intersection(self):
         return self.category == 'intersection'
+
+# pylint: disable=missing-docstring
+class Tool(models.Model):
+    name = models.CharField(max_length=128)
+    description = models.TextField(blank=True)
+    image = models.ImageField()
+    available = models.BooleanField(default=True)
+
+class CleanupTools(models.Model):
+    tool = models.ForeignKey(Tool, on_delete=models.CASCADE)
+    cleanup = models.ForeignKey(Cleanup, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1, required=False)
+
+    class Meta:
+        unique_together = ('tool', 'cleanup')
+        verbose_name_plural = "cleanup tools"
