@@ -122,11 +122,17 @@ class Tool(models.Model):
     image = models.ImageField()
     available = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.name
+
 class CleanupTools(models.Model):
     tool = models.ForeignKey(Tool, on_delete=models.CASCADE)
     cleanup = models.ForeignKey(Cleanup, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1, required=False)
+    quantity = models.IntegerField(default=1, blank=True)
 
     class Meta:
         unique_together = ('tool', 'cleanup')
         verbose_name_plural = "cleanup tools"
+
+    def __str__(self):
+        return "Cleanup: {} / Tool: {} (quantity: {})".format(self.cleanup.title, self.tool.name, self.quantity)
