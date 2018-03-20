@@ -4,7 +4,7 @@ from .models import Cleanup, Location, RequiredTools, Tool, ToolCategory
 
 class ToolAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
-    list_filter  = ['tool_category']
+    list_filter  = ['category']
 
 
 # Register your models here.

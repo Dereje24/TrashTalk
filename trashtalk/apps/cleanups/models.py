@@ -132,7 +132,7 @@ class Tool(models.Model):
     description = models.TextField(blank=True)
     image_static_location = models.CharField(max_length=200, blank=True)
     available = models.BooleanField(default=True)
-    tool_category = models.ForeignKey(ToolCategory, on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ForeignKey(ToolCategory, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name

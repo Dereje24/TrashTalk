@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load static %}
+{% block content%}
+<div class="row">
+    <div class="col-lg-4">
+        <label>Required Tools</label>
+        {% for category in tool_categories %}
+            <a href="#{{ category.name|slugify }}" data-toggle="collapse">
+                <h5>{{ category.name }}</h5>
+            </a>
+            <table id="{{ category.name|slugify }}" class="table-condensed table-responsive collapse">
+                {% for tool in category.tools %}
+                    <tr>
+                        <td>
+                            <a href="#{{ tool.name|slugify }}" data-toggle="collapse">{{ tool.name }}</a>
+                            <div id="{{ tool.name|slugify }}" class="collapse">
+                                <img src={% static tool.image_static_location %} class='img-responsive'/>
+                            </div>
+                            <p>{{ tool.description }}</p>
+                        </td>
+                        <td><input class="form-control input-sm" type="number" style="width:60px;" min=0 name="{{ tool.id }}" required pattern="[0-9]{1,}" value="0"></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    </div>
+</div>
+
+{%endblock%}

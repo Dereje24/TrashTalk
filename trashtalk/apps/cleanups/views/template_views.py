@@ -13,6 +13,7 @@ from rest_framework.parsers import FormParser
 from core.utils import host_required
 from cleanups.factories import cleanup_factory
 from cleanups.forms import CleanupFormSet
+from cleanups.models import Tool, ToolCategory
 from cleanups.serializers import Cleanup, Location, User
 
 logger = logging.getLogger('cleanups.views')
@@ -42,7 +43,14 @@ def cleanup_list(request):
 @login_required
 @parser_classes([FormParser])
 def cleanup_new(request):
-    context = {'form': CleanupFormSet()}
+    tool_categories = [] 
+    tools = Tool.objects.filter(available=True)
+    for category in ToolCategory.objects.all():
+        tool_categories.append({
+            'name': category.name,
+            'tools': Tool.objects.filter(available=True, category=category)
+        })
+    context = {'form': CleanupFormSet(), 'tool_categories': tool_categories}
     return render(request, 'cleanups/new.html', context)
 
 
