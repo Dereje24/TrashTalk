@@ -7,7 +7,6 @@ __pycache__/
 
 *.pyc
 .idea
-*.json
 ttshell.py
 notes.md
 CHANGELONG.md
@@ -130,3 +129,5 @@ ENV/
 .mypy_cache/
 NOTES.MD
 NOTES.md
+
+.vscode
