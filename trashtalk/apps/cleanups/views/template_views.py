@@ -44,13 +44,17 @@ def cleanup_list(request):
 @parser_classes([FormParser])
 def cleanup_new(request):
     tool_categories = [] 
-    tools = Tool.objects.filter(available=True)
-    for category in ToolCategory.objects.all():
+
+    for category in ToolCategory.objects.filter(tool__isnull=False).distinct().order_by('name'):
         tool_categories.append({
             'name': category.name,
-            'tools': Tool.objects.filter(available=True, category=category)
+            'tools': Tool.objects.filter(available=True, category=category).order_by('name')
         })
-    context = {'form': CleanupFormSet(), 'tool_categories': tool_categories}
+
+    context = {
+        'form': CleanupFormSet(),
+        'tool_categories': tool_categories
+    }
     return render(request, 'cleanups/new.html', context)
 
 
