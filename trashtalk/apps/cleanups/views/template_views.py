@@ -48,7 +48,7 @@ def cleanup_new(request):
     for category in ToolCategory.objects.filter(tool__isnull=False).distinct().order_by('name'):
         tool_categories.append({
             'name': category.name,
-            'tools': Tool.objects.filter(available=True, category=category).order_by('name')
+            'tools': Tool.objects.filter(is_available=True, category=category).order_by('name')
         })
 
     context = {

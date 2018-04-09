@@ -3,8 +3,14 @@ import logging
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from cleanups.serializers import (Cleanup, CleanupSerializer,
-                                  Location, LocationSerializer)
+from  cleanups.models import (
+    Cleanup, Location, RequiredTools, Tool, ToolCategory
+)
+
+from cleanups.serializers import (CleanupSerializer,
+                                  LocationSerializer,
+                                  ToolSerializer, ToolCategorySerializer,
+                                  RequiredToolsSerializer)
 
 logger = logging.getLogger('cleanups.views')
 
@@ -33,4 +39,17 @@ class CleanupDetailView(generics.RetrieveUpdateDestroyAPIView):
 class LocationListCreateView(generics.ListCreateAPIView):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+
+class ToolView(generics.ListAPIView):
+    queryset = Tool.objects.filter(is_available=True)
+    serializer_class = ToolSerializer
+
+class ToolCategoryView(generics.ListAPIView):
+    queryset = ToolCategory.objects.filter()
+    serializer_class = ToolCategorySerializer
+
+# pylint: disable=missing-docstring
+class RequiredToolsView():
+    queryset = RequiredTools.objects.all()
+    serializer_class = RequiredToolsSerializer
 

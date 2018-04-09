@@ -2,17 +2,36 @@ import logging
 from rest_framework import serializers
 
 from accounts.serializers import User
-from .models import Cleanup, Location
+from .models import (
+    Cleanup, Location, RequiredTools, Tool, ToolCategory
+)
 
 logger = logging.getLogger('cleanups.serializers')
 
+# pylint: disable=missing-docstring
+class ToolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tool
+        fields = ['id', 'category', 'description', 'image_static_location', 'name']
+
+# pylint: disable=missing-docstring
+class ToolCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ToolCategory
+        fields = ['id', 'name', 'description']
+
+class RequiredToolsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RequiredTools
+        fields = ['tool', 'cleanup', 'quantity']
 
 # pylint: disable=missing-docstring
 class LocationSerializer(serializers.ModelSerializer):
     # pylint: disable=too-few-public-methods
     class Meta:
         model = Location
-        fields = ['id', 'number', 'street']
+        fields = ['id', 'latitude', 'longitude', 'number', 'street']
 
 
 # pylint: disable=missing-docstring

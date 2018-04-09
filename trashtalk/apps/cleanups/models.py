@@ -76,8 +76,8 @@ class Location(models.Model):
     county = models.CharField(max_length=100, blank=True)
     district = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=100, default=DEFAULT_COUNTRY)
-    latitude = models.CharField(max_length=100, blank=True)
-    longitude = models.CharField(max_length=100, blank=True)
+    latitude = models.DecimalField(blank=True, decimal_places=3, max_digits=6)
+    longitude = models.DecimalField(blank=True, decimal_places=3, max_digits=6)
     category = models.CharField(choices=LOCATION_CATEGORIES, max_length=100, null=True)
 
     def __str__(self):
@@ -131,8 +131,13 @@ class Tool(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
     image_static_location = models.CharField(max_length=200, blank=True)
-    available = models.BooleanField(default=True)
-    category = models.ForeignKey(ToolCategory, on_delete=models.CASCADE, null=True, blank=True)
+    is_available = models.BooleanField(default=True)
+    category = models.ForeignKey(
+        ToolCategory,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.name
@@ -148,4 +153,6 @@ class RequiredTools(models.Model):
         verbose_name_plural = "required tools"
 
     def __str__(self):
-        return "Cleanup: {} / Tool: {} (quantity: {})".format(self.cleanup.title, self.tool.name, self.quantity)
+        return "Cleanup: {} / Tool: {} (quantity: {})".format(
+            self.cleanup.title, self.tool.name, self.quantity
+        )
