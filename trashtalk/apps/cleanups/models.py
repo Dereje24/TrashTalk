@@ -17,7 +17,7 @@ class Cleanup(models.Model):
     end_time = models.TimeField()
     date = models.DateField(default=datetime.today)
     image = models.CharField(max_length=300, blank=True, default=DEFAULT_ICON)
-    host = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cleanups")
+    host = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cleanups", null=True)
     location = models.ForeignKey('Location', on_delete=models.CASCADE)
 
     participants = models.ManyToManyField(User)
