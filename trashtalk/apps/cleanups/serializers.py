@@ -38,20 +38,23 @@ class LocationSerializer(serializers.ModelSerializer):
 class CleanupSerializer(serializers.ModelSerializer):
     image = serializers.CharField(required=False)
     location = LocationSerializer(required=False)
-    host = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    host = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
     participants = serializers.PrimaryKeyRelatedField(many=True, required=False,
                                                       queryset=User.objects.all())
+    required_tools = RequiredToolsSerializer(many=True)
 
     class Meta:
         model = Cleanup
-        fields = ('id', 'title', 'description', 'image', 'date', 'participants',
-                  'start_time', 'end_time', 'location', 'host')
+        fields = ('id', 'title', 'description', 'image', 'participants',
+                  'start', 'end', 'location', 'host', 'required_tools')
         depth = 1
 
     def create(self, validated_data):
         # TODO: Issue #97 -- Integrate with integrations.google_maps.api.geolocate
+        import pdb; pdb.set_trace()
         location = Location.objects.create(**validated_data.pop('location'))
         cleanup = Cleanup.objects.create(location=location, **validated_data)
+        required_tools = RequiredTools.objects.create(**validated_data.pop('required_tools'))
         return cleanup
 
     def update(self, instance, validated_data):

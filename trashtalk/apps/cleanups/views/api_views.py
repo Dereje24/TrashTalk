@@ -26,7 +26,7 @@ class CleanupDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 class CleanupListCreateAPIView(generics.ListCreateAPIView):
     queryset = Cleanup.objects.all()
     serializer_class = CleanupSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    # permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 # pylint: disable=missing-docstring

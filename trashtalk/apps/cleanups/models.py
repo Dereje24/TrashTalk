@@ -12,15 +12,14 @@ class Cleanup(models.Model):
     DEFAULT_ICON = 'images/defaults/bow_rake.jpg'
 
     title = models.CharField(max_length=300)
-    description = models.TextField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    date = models.DateField(default=datetime.today)
+    description = models.TextField(blank=True, null=True)
+    start = models.DateTimeField(blank=True, null=True)
+    end = models.DateTimeField(blank=True, null=True)
     image = models.CharField(max_length=300, blank=True, default=DEFAULT_ICON)
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cleanups", null=True, blank=True)
     location = models.ForeignKey('Location', on_delete=models.CASCADE)
 
-    participants = models.ManyToManyField(User)
+    participants = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return "Cleanup at {0}".format(self.location)
@@ -68,7 +67,7 @@ class Location(models.Model):
 
     # Fields with blank=True make them non-required fields
     number = models.CharField(max_length=100, blank=True)
-    street = models.CharField(max_length=100)
+    street = models.CharField(max_length=100, blank=True, null=True)
     cross_street = models.CharField(max_length=100, blank=True)
     city = models.CharField(max_length=100, default=DEFAULT_CITY)
     state = models.CharField(max_length=100, default=DEFAULT_STATE)
@@ -76,11 +75,14 @@ class Location(models.Model):
     county = models.CharField(max_length=100, blank=True)
     district = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=100, default=DEFAULT_COUNTRY)
-    latitude = models.DecimalField(blank=True, decimal_places=3, max_digits=6)
-    longitude = models.DecimalField(blank=True, decimal_places=3, max_digits=6)
-    category = models.CharField(choices=LOCATION_CATEGORIES, max_length=100, null=True)
+    query_string = models.CharField(max_length=200, null=True, blank=True, help_text='String used to query this location')
+    latitude = models.DecimalField(blank=True, null=True, decimal_places=4, max_digits=7)
+    longitude = models.DecimalField(blank=True, null=True, decimal_places=4, max_digits=7)
+    category = models.CharField(choices=LOCATION_CATEGORIES, max_length=100, blank=True, null=True)
 
     def __str__(self):
+        if self.query_string:
+            return self.query_string
         return "{0} {1}, {2}".format(self.address, self.city, self.state)
 
     @property
